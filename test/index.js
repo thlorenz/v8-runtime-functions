@@ -1,53 +1,12 @@
 #!/usr/bin/env node --allow-natives-syntax
 'use strict';
-
-// src/runtime.h
-// src/symbol.js
-// src/objects.h
-
-/*var objOps = [
-    '_ValueOf'
-  , 'SymbolDescription'
-]
-
-
-var is = [
-  'IsPropertyEnumerable', 
-]
-
-
-var transforms = [
-  'ToFastProperties'
-]
-
-var fns= [
-  'OptimizeFunctionOnNextCall'
-]
-
-var strings = [
-  'IsTemplate'
-]
-
-var notworking = [
-  'CreateSymbol'
-]*/
+var test = require('tap').test
+var rf = require('../')
 
 function inspect(obj, depth) {
   console.error(require('util').inspect(obj, false, depth || 5, true));
 }
 
-function run(name, val) {
-  try { 
-    /*jshint evil: true */
-    var fn = new Function('val', 'return %' + name + '(val)');
-    var o = {};
-    o[name] = fn(val);
-    inspect(o);
-  } catch (e) {
-    console.error(name);
-    console.error(e)
-  }
-}
 
 function runNoArgs(name) {
   try { 
@@ -71,28 +30,37 @@ function Point(x, y) {
   /*jshint ignore: end */
 }
 
-var pt = new Point(1, 2);
-var ar = new Array(10000);
-var st = 'Hello World';
+Point.prototype.common = 3;
 
-var has = [
-    'HasFastProperties'
-  , 'HasFastSmiElements'
-  , 'HasFastObjectElements'
-  , 'HasFastSmiOrObjectElements'
-  , 'HasFastDoubleElements'
-  , 'HasFastHoleyElements'
-  , 'HasDictionaryElements'
-  , 'HasExternalArrayElements'
-].forEach(function (name) { run(name, pt) });
+var pt;
+function setup() {
+  pt = new Point(1, 2);
+}
 
 
 /*jshint ignore: start */
 /* Property access */ 
-inspect(%GetProperty(pt, 'x'))
+/*inspect(%GetProperty(pt, 'x'))
 inspect(%KeyedGetProperty(pt, 'x'))
-assert(inspect(%HasLocalProperty(pt, 'x')))
+assert(inspect(%HasLocalProperty(pt, 'x')))*/
 
 
 /*jshint ignore: end */
+
+test('\nproperty access', function (t) {
+  setup()
+  t.equal(rf.getProperty(pt, 'x'), 1, 'getProperty local')
+  t.equal(rf.getProperty(pt, 'common'), 3, 'getProperty proto')
+  t.equal(rf.keyedGetProperty(pt, 'x'), 1, 'keyedGetProperty local')
+  t.equal(rf.keyedGetProperty(pt, 'common'), 3, 'keyedGetProperty proto')
+
+  t.ok(rf.hasLocalProperty(pt, 'x'), 'hasLocalProperty local')
+  t.ok(!rf.hasLocalProperty(pt, 'common'), 'not hasLocalProperty proto')
+  t.ok(rf.hasProperty(pt, 'x'), 'hasProperty local')
+  t.ok(rf.hasProperty(pt, 'common'), 'hasProperty proto')
+
+  rf.deleteProperty(pt, 'x', 0);
+  t.ok(!rf.hasProperty(pt, 'x'), 'delete property local')
+  t.end()
+})
 
