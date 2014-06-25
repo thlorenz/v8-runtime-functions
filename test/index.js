@@ -40,3 +40,7 @@ test('\nproperty access', function (t) {
   t.end()
 })
 
+test('\nvarious', function (t) {
+  t.ok(0 < rf.GetHeapUsage() < process.memoryUsage().heapUsed, 'GetHeapUsage')
+  t.end()
+})
