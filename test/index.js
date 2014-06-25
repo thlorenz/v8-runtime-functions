@@ -1,24 +1,10 @@
-#!/usr/bin/env node --allow-natives-syntax
+// node --allow-natives-syntax
 'use strict';
 var test = require('tap').test
 var rf = require('../')
 
 function inspect(obj, depth) {
   console.error(require('util').inspect(obj, false, depth || 5, true));
-}
-
-
-function runNoArgs(name) {
-  try { 
-    /*jshint evil: true */
-    var fn = new Function('return %' + name + '()');
-    var o = {};
-    o[name] = fn();
-    inspect(o);
-  } catch (e) {
-    console.error(name);
-    console.error(e)
-  }
 }
 
 function Point(x, y) {
@@ -37,30 +23,20 @@ function setup() {
   pt = new Point(1, 2);
 }
 
-
-/*jshint ignore: start */
-/* Property access */ 
-/*inspect(%GetProperty(pt, 'x'))
-inspect(%KeyedGetProperty(pt, 'x'))
-assert(inspect(%HasLocalProperty(pt, 'x')))*/
-
-
-/*jshint ignore: end */
-
 test('\nproperty access', function (t) {
   setup()
-  t.equal(rf.getProperty(pt, 'x'), 1, 'getProperty local')
-  t.equal(rf.getProperty(pt, 'common'), 3, 'getProperty proto')
-  t.equal(rf.keyedGetProperty(pt, 'x'), 1, 'keyedGetProperty local')
-  t.equal(rf.keyedGetProperty(pt, 'common'), 3, 'keyedGetProperty proto')
+  t.equal(rf.GetProperty(pt, 'x'), 1, 'GetProperty local')
+  t.equal(rf.GetProperty(pt, 'common'), 3, 'GetProperty proto')
+  t.equal(rf.KeyedGetProperty(pt, 'x'), 1, 'KeyedGetProperty local')
+  t.equal(rf.KeyedGetProperty(pt, 'common'), 3, 'KeyedGetProperty proto')
 
-  t.ok(rf.hasLocalProperty(pt, 'x'), 'hasLocalProperty local')
-  t.ok(!rf.hasLocalProperty(pt, 'common'), 'not hasLocalProperty proto')
-  t.ok(rf.hasProperty(pt, 'x'), 'hasProperty local')
-  t.ok(rf.hasProperty(pt, 'common'), 'hasProperty proto')
+  t.ok(rf.HasLocalProperty(pt, 'x'), 'HasLocalProperty local')
+  t.ok(!rf.HasLocalProperty(pt, 'common'), 'not HasLocalProperty proto')
+  t.ok(rf.HasProperty(pt, 'x'), 'HasProperty local')
+  t.ok(rf.HasProperty(pt, 'common'), 'HasProperty proto')
 
-  rf.deleteProperty(pt, 'x', 0);
-  t.ok(!rf.hasProperty(pt, 'x'), 'delete property local')
+  rf.DeleteProperty(pt, 'x', 0);
+  t.ok(!rf.HasProperty(pt, 'x'), 'Delete property local')
   t.end()
 })
 
