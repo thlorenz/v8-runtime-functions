@@ -10,10 +10,6 @@ function inspect(obj, depth) {
 function Point(x, y) {
   this.x = x;
   this.y = y;
-  /*jshint ignore: start */
-  var is = %_IsConstructCall();
-  console.error('is construct call', is);
-  /*jshint ignore: end */
 }
 
 Point.prototype.common = 3;
