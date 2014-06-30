@@ -5,12 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test-main": "tap test/*.js",
-    "test-0.8": "nave use 0.8 npm install && nave use 0.8 npm run test-main",
-    "test-0.10": "nave use 0.10 npm install && nave use 0.10 npm run test-main",
-    "test-0.11": "nave use 0.11 npm install && nave use 0.11 npm run test-main",
+    "test-0.8": "npm rm v8-flags && nave use 0.8 npm install && nave use 0.8 npm run test-main",
+    "test-0.10": "npm rm v8-flags && nave use 0.10 npm install && nave use 0.10 npm run test-main",
+    "test-0.11": "npm rm v8-flags && nave use 0.11 npm install && nave use 0.11 npm run test-main",
     "test-all": "npm run test-main && npm run test-0.8 && npm run test-0.10 && npm run test-0.11",
     "test": "if [ -e $TRAVIS ]; then npm run test-all; else npm run test-main; fi",
-    "install": "node-gyp rebuild",
     "gen-api": "node scripts/gen-api"
   },
   "repository": {
@@ -18,7 +17,9 @@
     "url": "git://github.com/thlorenz/v8-runtime-functions.git"
   },
   "homepage": "https://github.com/thlorenz/v8-runtime-functions",
-  "dependencies": {},
+  "dependencies": {
+    "v8-flags": "~0.1.1"
+  },
   "devDependencies": {
     "nan": "~1.2.0",
     "nave": "~0.4.3",

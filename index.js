@@ -1,6 +1,5 @@
 'use strict';
   
-var rf = require('./build/Release/runtime_functions');
-rf.allowNatives();
-
+var flags = require('v8-flags').flags;
+flags.allow_natives_syntax(true);
 module.exports = require('./runtime-functions');
