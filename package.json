@@ -1,6 +1,6 @@
 {
   "name": "v8-runtime-functions",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Exposes and documents v8 runtime functions.",
   "main": "index.js",
   "scripts": {
